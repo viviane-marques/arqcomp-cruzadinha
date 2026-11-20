@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Boot do PC — Jogo de Arquitetura Computacional</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topo">
+    <h1>⚡ Boot do PC</h1>
+    <p class="sub">Leia a pista de cada chip, digite a resposta nas casas e inicialize o computador.</p>
+  </header>
+
+  <section class="painel">
+    <div class="contador" id="contador" aria-live="polite">0 de 16 palavras</div>
+    <div class="barra" aria-hidden="true"><div class="barra-fill" id="barra"></div></div>
+    <div class="status" id="status">Sistema desligado. Aperte as teclas e comece a montar!</div>
+    <div class="botoes">
+      <button id="btnConferir" class="btn principal">Conferir</button>
+      <button id="btnReiniciar" class="btn">Reiniciar</button>
+    </div>
+  </section>
+
+  <main id="placa" class="placa"></main>
+
+  <footer class="rodape">Arquitetura Computacional · Sprint 3</footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
