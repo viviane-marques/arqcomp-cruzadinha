@@ -1,17 +1,17 @@
 const R = 8, C = 8, N = R * C, NP = 12;
 
 const BANCO = [
-  { rotulo: "CPU", pista: "Cérebro do computador: busca, decodifica e executa as instruções dos programas." },
-  { rotulo: "ULA", pista: "Parte da CPU que faz as contas e as operações lógicas." },
+  { rotulo: "CPU", pista: "Cérebro do computador: Executa instruções e gerencia o funcionamento do sistema." },
+  { rotulo: "ULA", pista: "Parte da CPU que faz os cálculos matemáticos e as operações lógicas." },
   { rotulo: "UC", pista: "Parte da CPU que comanda e coordena o que os outros componentes fazem." },
-  { rotulo: "REGIS-\nTRADO-\nRES", pista: "Minúsculas memórias dentro da CPU, as mais rápidas, guardam dados em uso imediato." },
-  { rotulo: "RAM", pista: "Memória principal e volátil que guarda programas em execução e perde tudo sem energia." },
+  { rotulo: "REGIS-\nTRADO-\nRES", pista: "Minúsculas memórias dentro da CPU, as mais rápidas, guardam dados temporariamente em uso imediato." },
+  { rotulo: "RAM", pista: "Memória principal e volátil que guarda temporariamente dados e instruções enquanto o computador está ligado." },
   { rotulo: "ROM", pista: "Memória permanente gravada na fabricação, mantém o conteúdo mesmo sem energia." },
   { rotulo: "EEPROM", pista: "Memória permanente regravável por sinais elétricos, que permite alterar um único byte por vez." },
   { rotulo: "FLASH", pista: "Memória permanente regravável em blocos, usada em pendrives e SSDs." },
-  { rotulo: "CACHE", pista: "Memória pequena e veloz entre CPU e RAM que guarda dados usados com frequência." },
+  { rotulo: "CACHE", pista: "Memória temporária muito rápida: guarda dados usados com frequência para acelerar o acesso às informações." },
   { rotulo: "MEMORIA\nDE\nMASSA", pista: "Guarda arquivos e programas por muito tempo, em grande capacidade, como um HD." },
-  { rotulo: "DMA", pista: "Mecanismo que move dados entre memória e periféricos sem ocupar a CPU." },
+  { rotulo: "DMA", pista: "Mecanismo que move dados entre memória e periféricos sem depender da CPU." },
   { rotulo: "ADDRESS\nBUS", pista: "Caminho de mão única por onde a CPU informa a posição de memória desejada." },
   { rotulo: "DATA\nBUS", pista: "Caminho de mão dupla por onde trafegam os valores lidos e escritos entre componentes." },
   { rotulo: "MICRO-\nCONTRO-\nLADOR", pista: "Chip com processador, memória e portas de entrada e saída, típico de sistemas embarcados." },
@@ -30,14 +30,14 @@ const barra = document.getElementById("barra");
 const preenchidasEl = document.getElementById("preenchidas");
 const statusEl = document.getElementById("status");
 
-let pares = [];      // 12 itens sorteados (índice = número da pista - 1)
-let dots = [];       // dots[cel] = {t:'q'|'a', p}
+let pares = [];      
+let dots = [];       
 let dotEls = [];
-let respCell = [];   // célula da resposta certa de cada pista
-let paths = [];      // paths[p] = lista de células do fio da pista p
-let dono = [];       // dono[cel] = pista dona do fio naquela célula (ou -1)
+let respCell = [];   
+let paths = [];      
+let dono = [];       
 let desenhando = null;
-let marcas = [];     // resultado do Conferir por pista
+let marcas = [];     
 
 function embaralhar(a) {
   for (let i = a.length - 1; i > 0; i--) {
@@ -47,7 +47,7 @@ function embaralhar(a) {
   return a;
 }
 
-/* Gera um caminho que passa por todas as casas (algoritmo "backbite") */
+
 function gerarCaminho() {
   let path = [];
   for (let r = 0; r < R; r++)
@@ -78,7 +78,7 @@ function gerarCaminho() {
   return path;
 }
 
-/* Divide o caminho em NP pedaços (cada um com pelo menos 3 casas) */
+
 function dividir(path) {
   const lens = Array(NP).fill(3);
   for (let extra = N - 3 * NP; extra > 0; extra--) lens[Math.floor(Math.random() * NP)]++;
@@ -99,7 +99,7 @@ function novoJogo() {
     respCell[p] = s[s.length - 1];
   });
 
-  // tabuleiro
+
   grid.innerHTML = "";
   dotEls = [];
   for (let i = 0; i < N; i++) {
@@ -120,7 +120,7 @@ function novoJogo() {
     grid.appendChild(cel);
   }
 
-  // lista de pistas
+
   listaPistas.innerHTML = "";
   pares.forEach((it, p) => {
     const li = document.createElement("li");
@@ -146,7 +146,7 @@ function reiniciar() {
   desenhar();
 }
 
-/* ---------- Desenho ---------- */
+
 function desenhar() {
   svg.innerHTML = "";
   paths.forEach((arr, p) => {
@@ -182,7 +182,7 @@ function desenhar() {
   preenchidasEl.textContent = `Casas preenchidas: ${cheias} de ${N}`;
 }
 
-/* ---------- Lógica dos fios ---------- */
+
 function cortar(p, k) {
   const arr = paths[p];
   for (let j = k; j < arr.length; j++) dono[arr[j]] = -1;
@@ -194,20 +194,20 @@ function entrar(i) {
   const arr = paths[p];
   const ultimo = arr[arr.length - 1];
 
-  // voltar uma casa
+
   if (arr.length >= 2 && arr[arr.length - 2] === i) {
     cortar(p, arr.length - 1);
     return true;
   }
-  // cruzar o próprio fio: volta até ali
+
   if (dono[i] === p) {
     cortar(p, arr.indexOf(i) + 1);
     return true;
   }
   const d = dots[i];
-  if (d && d.t === "q") return false; // não entra em outra pergunta
+  if (d && d.t === "q") return false; 
 
-  // cortar o fio de outra cor
+  
   if (dono[i] >= 0 && dono[i] !== p) {
     cortar(dono[i], paths[dono[i]].indexOf(i));
   }
