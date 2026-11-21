@@ -26,10 +26,10 @@ $ sudo ./connect_boot --start
 ## > acessar_jogo
 
 ```
-$ open https://SEU-USUARIO.github.io/arqcomp-cruzadinha/
+$ open https://viviane-marques.github.io/arqcomp-cruzadinha/
 ```
 
-**Link do site:** https://SEU-USUARIO.github.io/arqcomp-cruzadinha/
+**Link do site:** https://viviane-marques.github.io/arqcomp-cruzadinha/
 
 ---
 
