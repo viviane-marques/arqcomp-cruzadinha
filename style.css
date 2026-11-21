@@ -1,8 +1,7 @@
 :root {
   --bg: #0b1220;
-  --placa: #0f3d2e;
-  --placa2: #0c3126;
-  --trilha: #1f7a56;
+  --painel: #111b30;
+  --borda: #22335a;
   --texto: #e8f1ee;
   --ouro: #f2c14e;
   --ok: #2ecc71;
@@ -10,25 +9,25 @@
 }
 * { box-sizing: border-box; }
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--texto);
+  margin: 0; padding: 16px;
+  background: var(--bg); color: var(--texto);
   font-family: "Segoe UI", system-ui, sans-serif;
-  padding: 16px;
 }
 .topo { text-align: center; margin-bottom: 12px; }
-.topo h1 { margin: 0; font-size: 2rem; letter-spacing: 1px; color: var(--ouro); }
+.topo h1 { margin: 0; font-size: 2rem; color: var(--ouro); }
 .sub { margin: 4px 0 0; opacity: .85; }
 
 .painel {
   max-width: 900px; margin: 0 auto 16px; text-align: center;
-  background: #111b30; border: 1px solid #22335a; border-radius: 12px; padding: 14px;
+  background: var(--painel); border: 1px solid var(--borda);
+  border-radius: 12px; padding: 14px;
 }
 .contador { font-size: 1.4rem; font-weight: 700; }
 .barra { height: 14px; background: #1b2a4a; border-radius: 99px; margin: 10px 0; overflow: hidden; }
 .barra-fill { height: 100%; width: 0; background: linear-gradient(90deg, #f2c14e, #2ecc71); transition: width .5s; }
-.status { min-height: 1.4em; margin-bottom: 10px; opacity: .9; }
-.botoes { display: flex; gap: 10px; justify-content: center; }
+.preenchidas { opacity: .8; font-size: .95rem; }
+.status { min-height: 1.4em; margin: 6px 0 10px; }
+.botoes { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .btn {
   border: 2px solid var(--ouro); background: transparent; color: var(--ouro);
   padding: 10px 22px; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer;
@@ -37,50 +36,61 @@ body {
 .btn.principal { background: var(--ouro); color: #111; }
 .btn.principal:hover { background: #ffd876; }
 
-.placa {
-  max-width: 1100px; margin: 0 auto;
-  background:
-    linear-gradient(var(--placa), var(--placa2));
-  border: 3px solid var(--trilha); border-radius: 16px; padding: 18px;
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;
+/* Layout do jogo */
+.jogo {
+  max-width: 1000px; margin: 0 auto;
+  display: flex; gap: 20px; align-items: flex-start; justify-content: center; flex-wrap: wrap;
 }
-.grupo-titulo {
-  grid-column: 1 / -1; margin: 6px 0 -4px; color: var(--ouro);
-  font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase;
-  border-bottom: 2px dashed var(--trilha); padding-bottom: 4px;
+.gridwrap {
+  position: relative; width: min(92vw, 520px); aspect-ratio: 1;
+  container-type: inline-size;
+  background: #0c1426; border: 3px solid #2a3f6b; border-radius: 10px;
+  user-select: none; -webkit-user-select: none;
 }
-.chip {
-  position: relative; background: #0a2a20; border: 2px solid var(--trilha);
-  border-radius: 10px; padding: 12px 12px 14px; transition: border-color .2s, box-shadow .2s;
+#grid {
+  display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr);
+  width: 100%; height: 100%; touch-action: none; cursor: pointer;
 }
-.chip::before, .chip::after {
-  content: ""; position: absolute; top: 12px; bottom: 12px; width: 6px;
-  background: repeating-linear-gradient(#c9ced6 0 8px, transparent 8px 14px);
+.cell {
+  border: 1px solid #1d2b4a; display: flex; align-items: center; justify-content: center;
 }
-.chip::before { left: -8px; } .chip::after { right: -8px; }
-.chip .led {
-  position: absolute; top: 10px; right: 12px; width: 12px; height: 12px;
-  border-radius: 50%; background: #555; box-shadow: 0 0 0 2px #222;
+#fios {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 1;
 }
-.chip .num { font-weight: 800; color: var(--ouro); }
-.chip .pista { margin: 6px 0 10px; line-height: 1.35; min-height: 2.7em; padding-right: 18px; }
-.casas { display: flex; flex-wrap: wrap; gap: 4px; }
-.casas input {
-  width: 28px; height: 34px; text-align: center; text-transform: uppercase;
-  font-size: 1.05rem; font-weight: 700; font-family: monospace;
-  background: #f4f7f5; color: #111; border: 2px solid #9fb3aa; border-radius: 5px; padding: 0;
-}
-.casas input:focus { outline: none; border-color: var(--ouro); box-shadow: 0 0 0 2px rgba(242,193,78,.4); }
 
-.chip.certo { border-color: var(--ok); box-shadow: 0 0 14px rgba(46,204,113,.5); }
-.chip.certo .led { background: var(--ok); box-shadow: 0 0 10px var(--ok); }
-.chip.certo .casas input { background: #d7f7e3; border-color: var(--ok); }
-.chip.errado { border-color: var(--erro); box-shadow: 0 0 14px rgba(255,77,94,.4); }
-.chip.errado .led { background: var(--erro); box-shadow: 0 0 10px var(--erro); }
-.chip.errado .casas input { background: #ffe1e4; border-color: var(--erro); }
+/* Bolinhas */
+.dot {
+  position: relative; z-index: 2; width: 80%; height: 80%; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  color: #111; font-weight: 800; line-height: 1.05; overflow: hidden; padding: 2px;
+  white-space: pre-line; pointer-events: none;
+}
+.dot.q { font-size: max(11px, 3.6cqw); box-shadow: 0 0 0 2px rgba(255,255,255,.35); }
+.dot.a { background: #eef2f7; font-size: max(6px, 1.95cqw); font-family: monospace; }
+.dot.a.certo { box-shadow: 0 0 0 3px var(--ok); }
+.dot.a.errado { box-shadow: 0 0 0 3px var(--erro); }
+
+/* Lista de pistas */
+.pistas {
+  list-style: none; margin: 0; padding: 0;
+  width: min(92vw, 440px); display: flex; flex-direction: column; gap: 6px;
+}
+.pistas li {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--painel); border: 2px solid var(--borda); border-radius: 10px;
+  padding: 6px 10px; font-size: .9rem; line-height: 1.3;
+}
+.pistas .badge {
+  flex: none; width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; color: #111; font-size: .85rem;
+}
+.pistas .txt { flex: 1; }
+.pistas .marca { flex: none; font-weight: 800; min-width: 1.4em; text-align: center; }
+.pistas li.certo { border-color: var(--ok); }
+.pistas li.certo .marca { color: var(--ok); }
+.pistas li.errado { border-color: var(--erro); }
+.pistas li.errado .marca { color: var(--erro); }
 
 .rodape { text-align: center; margin-top: 18px; opacity: .6; font-size: .85rem; }
-
-@media (max-width: 500px) {
-  .casas input { width: 22px; height: 30px; font-size: .9rem; }
-}

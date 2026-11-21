@@ -3,26 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Boot do PC — Jogo de Arquitetura Computacional</title>
+  <title>Connect Boot — Arquitetura Computacional</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="topo">
-    <h1>⚡ Boot do PC</h1>
-    <p class="sub">Leia a pista de cada chip, digite a resposta nas casas e inicialize o computador.</p>
+    <h1>🔌 Connect Boot</h1>
+    <p class="sub">Arraste do círculo numerado até a resposta certa e preencha todas as casas.</p>
   </header>
 
   <section class="painel">
-    <div class="contador" id="contador" aria-live="polite">0 de 16 palavras</div>
+    <div class="contador" id="contador" aria-live="polite">0 de 12 palavras</div>
     <div class="barra" aria-hidden="true"><div class="barra-fill" id="barra"></div></div>
-    <div class="status" id="status">Sistema desligado. Aperte as teclas e comece a montar!</div>
+    <div class="preenchidas" id="preenchidas">Casas preenchidas: 0 de 64</div>
+    <div class="status" id="status">Painel desligado. Comece a ligar os fios!</div>
     <div class="botoes">
-      <button id="btnConferir" class="btn principal">Conferir</button>
-      <button id="btnReiniciar" class="btn">Reiniciar</button>
+      <button id="btnConferir" class="btn principal" type="button">Conferir</button>
+      <button id="btnReiniciar" class="btn" type="button">Reiniciar</button>
+      <button id="btnNovo" class="btn" type="button">Novo jogo</button>
     </div>
   </section>
 
-  <main id="placa" class="placa"></main>
+  <div class="jogo">
+    <div class="gridwrap">
+      <div id="grid"></div>
+      <svg id="fios" viewBox="0 0 800 800" aria-hidden="true"></svg>
+    </div>
+    <ol id="pistas" class="pistas"></ol>
+  </div>
 
   <footer class="rodape">Arquitetura Computacional · Sprint 3</footer>
 
