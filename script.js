@@ -30,14 +30,14 @@ const barra = document.getElementById("barra");
 const preenchidasEl = document.getElementById("preenchidas");
 const statusEl = document.getElementById("status");
 
-let pares = [];      
-let dots = [];       
+let pares = [];      // 12 itens sorteados (índice = número da pista - 1)
+let dots = [];       // dots[cel] = {t:'q'|'a', p}
 let dotEls = [];
-let respCell = [];   
-let paths = [];      
-let dono = [];       
+let respCell = [];   // célula da resposta certa de cada pista
+let paths = [];      // paths[p] = lista de células do fio da pista p
+let dono = [];       // dono[cel] = pista dona do fio naquela célula (ou -1)
 let desenhando = null;
-let marcas = [];     
+let marcas = [];     // resultado do Conferir por pista
 
 function embaralhar(a) {
   for (let i = a.length - 1; i > 0; i--) {
@@ -47,7 +47,7 @@ function embaralhar(a) {
   return a;
 }
 
-
+/* Gera um caminho que passa por todas as casas (algoritmo "backbite") */
 function gerarCaminho() {
   let path = [];
   for (let r = 0; r < R; r++)
@@ -78,7 +78,7 @@ function gerarCaminho() {
   return path;
 }
 
-
+/* Divide o caminho em NP pedaços (cada um com pelo menos 3 casas) */
 function dividir(path) {
   const lens = Array(NP).fill(3);
   for (let extra = N - 3 * NP; extra > 0; extra--) lens[Math.floor(Math.random() * NP)]++;
@@ -99,7 +99,7 @@ function novoJogo() {
     respCell[p] = s[s.length - 1];
   });
 
-
+  // tabuleiro
   grid.innerHTML = "";
   dotEls = [];
   for (let i = 0; i < N; i++) {
@@ -120,7 +120,7 @@ function novoJogo() {
     grid.appendChild(cel);
   }
 
-
+  // lista de pistas
   listaPistas.innerHTML = "";
   pares.forEach((it, p) => {
     const li = document.createElement("li");
@@ -146,7 +146,7 @@ function reiniciar() {
   desenhar();
 }
 
-
+/* ---------- Desenho ---------- */
 function desenhar() {
   svg.innerHTML = "";
   paths.forEach((arr, p) => {
@@ -167,6 +167,7 @@ function desenhar() {
     if (!el || dots[i].t !== "a") return;
     const p = dono[i];
     el.style.background = p >= 0 ? CORES[p] : "";
+    el.style.color = p >= 0 ? "#021308" : "";
     el.classList.toggle("certo", p >= 0 && marcas[p] === "certo");
     el.classList.toggle("errado", p >= 0 && marcas[p] === "errado");
   });
@@ -182,7 +183,7 @@ function desenhar() {
   preenchidasEl.textContent = `Casas preenchidas: ${cheias} de ${N}`;
 }
 
-
+/* ---------- Lógica dos fios ---------- */
 function cortar(p, k) {
   const arr = paths[p];
   for (let j = k; j < arr.length; j++) dono[arr[j]] = -1;
@@ -194,20 +195,20 @@ function entrar(i) {
   const arr = paths[p];
   const ultimo = arr[arr.length - 1];
 
-
+  // voltar uma casa
   if (arr.length >= 2 && arr[arr.length - 2] === i) {
     cortar(p, arr.length - 1);
     return true;
   }
-
+  // cruzar o próprio fio: volta até ali
   if (dono[i] === p) {
     cortar(p, arr.indexOf(i) + 1);
     return true;
   }
   const d = dots[i];
-  if (d && d.t === "q") return false; 
+  if (d && d.t === "q") return false; // não entra em outra pergunta
 
-  
+  // cortar o fio de outra cor
   if (dono[i] >= 0 && dono[i] !== p) {
     cortar(dono[i], paths[dono[i]].indexOf(i));
   }
